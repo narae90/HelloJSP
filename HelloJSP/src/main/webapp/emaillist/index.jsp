@@ -35,6 +35,16 @@ List<EmailVo> list = dao.getList();
 			<th>이메일</th>
 			<td><%= vo.getEmail() %></td>
 		</tr>
+		<tr>
+			<td colspan="2">
+			<!-- 삭제 폼 -->
+				<form action="<%= request.getContextPath() %>/emaillist/delete.jsp"
+					method="POST">
+					<input type="hidden" name="no" value="<%= vo.getNo() %>" />	
+					<input type="submit" value="삭제" />
+				</form>
+			</td>
+		</tr>
 	</table>
 	<br />
 	<% } %>

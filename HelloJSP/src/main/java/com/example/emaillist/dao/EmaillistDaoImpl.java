@@ -118,8 +118,33 @@ public class EmaillistDaoImpl implements EmaillistDao {
 
 	@Override
 	public int delete(Long pk) {
-		// TODO Auto-generated method stub
-		return 0;
+		int deletedCount = 0;
+		Connection conn =null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "DELETE FROM emaillist WHERE no = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, pk);
+			
+			
+			// 쿼리 수행
+			deletedCount = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return deletedCount;
 	}
 
 }
