@@ -36,8 +36,9 @@ List<EmailVo> list = (List<EmailVo>)request.getAttribute("list");
 		<tr>
 			<td colspan="2">
 			<!-- 삭제 폼 -->
-				<form action="<%= request.getContextPath() %>/emaillist/delete.jsp"
+				<form action="<%= request.getContextPath() %>/el"
 					method="POST">
+					<input type="hidden" name ="a" value="delete" />
 					<input type="hidden" name="no" value="<%= vo.getNo() %>" />	
 					<input type="submit" value="삭제" />
 				</form>
@@ -50,7 +51,7 @@ List<EmailVo> list = (List<EmailVo>)request.getAttribute("list");
 	
 	<!-- 작성 폼으로 이동 -->
 	<p>
-		<a href="<%= request.getContextPath() %>/emaillist/form.jsp">추가 이메일 등록</a>
+		<a href="<%= request.getContextPath() %>/el?a=form">추가 이메일 등록</a>
 	</p>
 	
 </body>
