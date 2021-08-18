@@ -1,7 +1,6 @@
 package com.example.emaillist.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.example.emaillist.dao.UserDao;
 import com.example.emaillist.dao.UserDaoImpl;
@@ -38,6 +38,14 @@ public class UserServlet extends HttpServlet {
 			RequestDispatcher rd =
 				req.getRequestDispatcher("/WEB-INF/views/users/loginform.jsp");
 			rd.forward(req, resp);
+		} else if ("logout".equals(actionName)) {
+			//	a=logout
+			//	세션 객체 삭제
+			HttpSession session = req.getSession(false);
+			session.removeAttribute("authUser");
+			session.invalidate();	//	세션 전체 삭제
+			//	리다이렉트
+			resp.sendRedirect(req.getContextPath() + "/");
 		} else {
 			resp.sendError(404);	//	Page Not Found
 		}
@@ -76,27 +84,31 @@ public class UserServlet extends HttpServlet {
 				resp.sendRedirect(req.getContextPath() + "/users?a=joinform");
 			}
 		} else if ("login".equals(actionName)) {
-			// 로그인 수행
-			// 파라미터 확인
+			//	로그인 수행
+			//	파라미터 확인
 			String email = req.getParameter("email");
 			String password = req.getParameter("password");
 			
-			System.out.printf("로그링 정보 : email=%s, password=%s%n", email, password);
+			System.out.printf("로그인 정보: email=%s, password=%s%n", 
+					email, password);
 			
 			UserDao dao = new UserDaoImpl();
 			
 			UserVo vo = dao.getUserByEmailAndPassword(email, password);
-			if(vo == null) {
-				// 사용자 없음 or 비밀번호 틀림
-				System.out.println("사용자 없음!");
-				// 로그인 폼으로 돌아가기
+			if (vo == null) {
+				//	사용자 없음 or 비밀번호 틀림
+				System.err.println("사용자 없음!");
+				//	로그인 폼으로 돌아가기
 				resp.sendRedirect(req.getContextPath() + "/users?a=loginform");
 			} else {
-				// 시용자 찾음
-				System.out.println("사용자 발견!" + vo);
-				// 사용자 정보를 서버에 기록(세션)
+				//	사용자 찾음
+				System.out.println("사용자 발견! " + vo);
+				//	사용자 정보를 서버에 기록(세션)
+				HttpSession session = req.getSession(true);
+				//	객체를 세션에 저장
+				session.setAttribute("authUser", vo);
 				
-				// 홈페이지로 리다이렉트
+				//	홈페이지로 리다이렉트
 				resp.sendRedirect(req.getContextPath());
 			}
 		} else {
