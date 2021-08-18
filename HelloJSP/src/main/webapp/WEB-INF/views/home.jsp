@@ -1,16 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Hello HTML</title>
-</head>
-<body>
+    
+ <!--  동적 페이지 인클루드 -->   
+<jsp:include page="/WEB-INF/views/includes/header.jsp">
+	<jsp:param value="메인페이지" name="message"/>
+</jsp:include>
 
-	<h3>Hello HTML!!</h3>
-	<p> 이것은 우리가 만든 첫번째 HTML 입니다.</p>
 	
 	<ul>
 	<li><a href="<%= request.getContextPath() %>/users?a=joinform">회원가입</a></li>
@@ -49,7 +45,10 @@
 	 	<h4>Emaillist (Mobel 2:MVC)</h4>
 	 	<p><a href="/web/el">이메일 리스트 (Model 2)</a></p>
 	 	
-
-
-</body>
-</html>
+	 	
+	 	
+	 	<h4>Cookie Test</h4>
+	 	<p><a href="<%= request.getContextPath() %>/cookies">쿠키 테스트</a>
+	 	
+<!--  정적 페이지 인클루드 -->
+<%@ include file="/WEB-INF/views/includes/footer.jsp" %>
